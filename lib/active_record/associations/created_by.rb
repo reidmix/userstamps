@@ -15,10 +15,11 @@ module ActiveRecord   # :nodoc:
         # You can override the +created_by+ column name with :foriegn_key but at that point you might
         # as well set up the relationship yourself.
         def created_by user_model, options = {}
-          configuration = { :foreign_key => 'created_by', :class_name => user_model.to_s.classify }
+          configuration = {:foreign_key => 'created_by', :class_name => user_model.to_s.classify, :required => true}
           configuration.merge!(options) if options.is_a?(Hash)
 
           belongs_to :creator, :foreign_key => configuration[:foreign_key], :class_name => configuration[:class_name]
+          validates_presence_of :creator if configuration[:required]
         end
       end
     end

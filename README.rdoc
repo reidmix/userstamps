@@ -18,6 +18,10 @@ Adds a simple +belongs_to+ association to a +creator+ model based on a magic col
 
 == Options
 
+By default, the creator is required, you can turn this off with a :required option:
+
+  created_by :user, :required => false
+
 You could pass a :foriegn_key option to set a specific +created_by+ foriegn key but
 you might as well just setup the association yourself at that point.
 
