@@ -1,0 +1,24 @@
+= CreatedBy
+
+Adds a simple +belongs_to+ association to a +creator+ model based on a magic column
++created_by+ as it's foreign key.
+
+== Example
+
+  class User < ActiveRecord::Base
+  end
+
+  class Item < ActiveRecord::Base
+    created_by :user
+  end
+
+  i = Item.find(1)
+  i.created_by  #=> 3
+  i.creator     #=> #<User id:3>
+
+== Options
+
+You could pass a :foriegn_key option to set a specific +created_by+ foriegn key but
+you might as well just setup the association yourself at that point.
+
+Copyright (c) 2009 Reid MacDonald <reid@laruby.com>, released under the MIT license
