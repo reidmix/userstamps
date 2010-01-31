@@ -1,12 +1,57 @@
-= CreatedBy
+= UserStamps
 
-Adds a simple +belongs_to+ association to a +creator+ model based on a magic column
-+created_by+ as it's foreign key.
+Adds a simple +belongs_to+ associations to a user model based on a magic columns
++created_by+ and +updated_by+ as it's foreign key.
 
 == Example
 
   class User < ActiveRecord::Base
   end
+
+  class Item < ActiveRecord::Base
+    stamped_by :user
+  end
+
+  i = Item.find(1)
+  i.created_by  #=> 3
+  i.creator     #=> #<User id:3>
+  i.updated_by  #=> 5
+  i.updator     #=> #<User id:5>
+
+== Configuration
+
+You can specify configure how your +creator+ and +updator+ can be specified but
+you have to pass options to +created_by+ and +updated_by+ separately:
+
+  class Item < ActiveRecord::Base
+    created_by :user
+    updated_by :admin
+  end
+
+  i = Item.find(1)
+  i.created_by  #=> 3
+  i.creator     #=> #<User id:3>
+  i.updated_by  #=> 1
+  i.updator     #=> #<Admin id:1>
+
+== Options
+
+By default, the creator is required, you can turn this off with a :required option:
+
+  created_by :user, :required => false
+
+By default, the updator is _not_ required because on create you will need to specify
+an updator, but you can turn this on with a :required option:
+
+  updated_by :admin, :required => true
+
+You could pass a :foriegn_key option to set a specific +created_by+ or +updated_by+
+foriegn key but you might as well just setup the association yourself at that point.
+
+== Using only Created By
+
+If you only care about creators you can just specify a +created_by+ instead of
++stamped_by+ as an option.
 
   class Item < ActiveRecord::Base
     created_by :user
@@ -16,13 +61,4 @@ Adds a simple +belongs_to+ association to a +creator+ model based on a magic col
   i.created_by  #=> 3
   i.creator     #=> #<User id:3>
 
-== Options
-
-By default, the creator is required, you can turn this off with a :required option:
-
-  created_by :user, :required => false
-
-You could pass a :foriegn_key option to set a specific +created_by+ foriegn key but
-you might as well just setup the association yourself at that point.
-
-Copyright (c) 2009 Reid MacDonald <reid@laruby.com>, released under the MIT license
+Copyright (c) 2010 Reid MacDonald <reid@laruby.com>, released under the MIT license
